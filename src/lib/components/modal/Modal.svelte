@@ -1,23 +1,41 @@
 <script lang="ts">
   import CloseBtn from "./CloseBtn.svelte";
+  import ModalContent from "./modalContent/ModalContent.svelte";
+  import ModalContentShop from "./modalContent/ModalContentShop.svelte";
+  import ModalContentContact from "./modalContent/ModalContentContact.svelte";
 
   interface IProps {
-    isOpen: boolean
+    modalData: {
+      isOpenModal: boolean
+      name: string
+      type: string
+    }
   }
 
-  let { isOpen = $bindable() }: IProps = $props()
+  let { modalData = $bindable() }: IProps = $props()
 </script>
 
-<div class="modal modal__backdrop" class:modal--open={isOpen}>
+<div class="modal modal__backdrop" class:modal--open={modalData.isOpenModal}>
   <div class="modal__modal">
-    <CloseBtn bind:isOpen={isOpen}/>
+    <CloseBtn bind:isOpen={modalData.isOpenModal}/>
     <div class="modal__content">
-
+      {#if modalData.type == "content"}
+        {#if !!modalData.name}
+          <ModalContent name={modalData.name}/>
+        {/if}
+      {:else if modalData.type == "shop"}
+        {#if !!modalData.name}
+          <ModalContentShop name={modalData.name}/>
+        {/if}
+      {:else if modalData.type == "contact"}
+        <ModalContentContact/>
+      {/if}
     </div> 
   </div>
 </div>
 
 <style lang="scss">
+  @use "/static/styles/mixins" as mixins;
   .modal {
     position: fixed;
     left: 50%;
@@ -48,14 +66,31 @@
       height: 100%;
       max-width: 90%;
       max-height: 90vh;
-      background: #000;
-      padding: 50px;
-      border: 1px solid red;
+      background: #fff;
+      border: 1px solid #000;
+      border-radius: 15px;
+
+      @include mixins.media-breakpoint-up(xl) {
+        padding: 50px;
+      }
+
+      @include mixins.media-breakpoint-between(md, xl) {
+        padding: 35px;
+      }
+
+      @include mixins.media-breakpoint-down(md) {
+        padding: 20px;
+      }
     }
 
     &__content {
       height: 100%;
-      background: blue;
+      background: #ffffff;
+      overflow: auto;
+
+      &::-webkit-scrollbar {
+        width: 0;
+      }
     }
   }
 </style>

@@ -1,17 +1,41 @@
 <script lang="ts">
 
   interface IProps {
-    isOpenModal: boolean
+    modalData: {
+      isOpenModal: boolean
+      name: string
+      type: string
+    }
     data: {
       path_imge: string
       class_name: string
+      modal?: {
+        name: string
+        type: string
+      }
     }
   }
 
-  let { isOpenModal = $bindable(), data }: IProps = $props()
+  let { modalData = $bindable(), data }: IProps = $props()
+
+  const onmouseenter = () => {
+    if(!!data?.modal?.name) {
+      modalData.name = data.modal.name
+      modalData.type = data.modal.type
+    } else {
+      modalData.name = ''
+    }
+  }
+
+  const onclick = () => {
+    onmouseenter()
+    modalData.isOpenModal = !!data?.modal?.name
+  }
+
+  
 </script>
 
-<button class="point point__btn point--{data.class_name}" type="button" onclick={() => isOpenModal = true}>
+<button class="point point__btn point--{data.class_name}" type="button" {onclick} {onmouseenter}>
   <img src={data.path_imge} alt="alt" class="point__img" draggable="false">
 </button>
 
@@ -27,6 +51,31 @@
 
       &:hover {
         transform: scale(110%);
+      }
+    }
+
+    &--wind_rose {
+      top: 13%;
+      left: 2.7%;
+
+      @include mixins.media-breakpoint-up(xxxl) {
+        width: 710px;
+      }
+
+      @include mixins.media-breakpoint-between(xl, xxxl) {
+        width: 533px;
+      }
+
+      @include mixins.media-breakpoint-between(md, xl) {
+        width: 446px;
+      }
+
+      @include mixins.media-breakpoint-down(md) {
+        width: 533px;
+      }
+
+      &:hover {
+        transform: scale(105%);
       }
     }
 

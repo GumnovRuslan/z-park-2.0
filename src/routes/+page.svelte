@@ -2,11 +2,21 @@
   import Map from "$lib/components/Map.svelte";
   import Modal from "$lib/components/modal/Modal.svelte";
 
-  let isOpenModal: boolean = $state(false);
+  interface IModalData {
+    isOpenModal: boolean
+    name: string
+    type: 'content' | 'shop' | string
+  }
+
+  let modalData: IModalData = $state({
+    isOpenModal: false,
+    name: '',
+    type: ''
+  })
 </script>
 
-<Modal bind:isOpen={isOpenModal}/>
-<Map bind:isOpenModal={isOpenModal}/>
+<Modal bind:modalData={modalData}/>
+<Map bind:modalData={modalData}/>
 
 <style lang="scss">
 

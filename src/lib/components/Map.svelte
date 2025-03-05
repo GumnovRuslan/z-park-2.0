@@ -1,90 +1,16 @@
 <script lang="ts">
   import Point from "./Point.svelte";
+  import { POINTS } from "$lib/bd/pointData.js";
 
   interface IProps {
-    isOpenModal: boolean
+    modalData: {
+      isOpenModal: boolean
+      name: string
+      type: string
+    }
   }
 
-  const points = [
-    {
-      path_imge: '/img/place/бар1.png',
-      class_name: 'bar'
-    },
-    {
-      path_imge: '/img/place/батуты1.png',
-      class_name: 'trampolines'
-    },
-    {
-      path_imge: '/img/place/башня1.png',
-      class_name: 'tower'
-    },
-    {
-      path_imge: '/img/place/горка1.png',
-      class_name: 'slide'
-    },
-    {
-      path_imge: '/img/place/дискотека1.png',
-      class_name: 'disco'
-    },
-    {
-      path_imge: '/img/place/игровая площадка1.png',
-      class_name: 'playground'
-    },
-    {
-      path_imge: '/img/place/кафе1.png',
-      class_name: 'caffe1'
-    },
-    {
-      path_imge: '/img/place/кафе1.png',
-      class_name: 'caffe2'
-    },
-    {
-      path_imge: '/img/place/комната для др1.png',
-      class_name: 'birthday-room1'
-    },
-    {
-      path_imge: '/img/place/комната для др2.png',
-      class_name: 'birthday-room2'
-    },
-    {
-      path_imge: '/img/place/комната для др2.png',
-      class_name: 'birthday-room2-2'
-    },
-    {
-      path_imge: '/img/place/кухня1.png',
-      class_name: 'kitchen'
-    },
-    {
-      path_imge: '/img/place/лабиринт1.png',
-      class_name: 'maze'
-    },
-    {
-      path_imge: '/img/place/лого1.png',
-      class_name: 'logo'
-    },
-    {
-      path_imge: '/img/place/песочница1.png',
-      class_name: 'sandbox'
-    },
-    {
-      path_imge: '/img/place/ресепшн1.png',
-      class_name: 'reception'
-    },
-    {
-      path_imge: '/img/place/тарзанка1.png',
-      class_name: 'bungee'
-    },
-    {
-      path_imge: '/img/place/хоккей1.png',
-      class_name: 'hockey'
-    },
-    {
-      path_imge: '/img/place/яма1.png',
-      class_name: 'pit'
-    },
-  ]
-
-  let { isOpenModal = $bindable() }: IProps = $props()
+  let { modalData = $bindable() }: IProps = $props()
   let map: HTMLDivElement
   let isDragging: boolean = $state(false);
   let pos = $state({
@@ -95,6 +21,7 @@
   })
 
   const startDrag = (e: MouseEvent) => {
+    e.preventDefault()
     isDragging = true;
     pos = {
       startX: e.pageX - map.offsetLeft,
@@ -131,9 +58,9 @@
   style:cursor={isDragging ? 'grabbing' : 'grab'}
 >
   <div class="map__img-wrapper">
-    <img class="map__img" src="/img/zpark-map.webp" alt="map" draggable="false">
-    {#each points as pointData}
-      <Point bind:isOpenModal={isOpenModal} data={pointData}/>
+    <img class="map__img" src="/img/map.webp" alt="map" draggable="false">
+    {#each POINTS as pointData}
+      <Point bind:modalData={modalData} data={pointData}/>
     {/each}
   </div>
 </div>
@@ -153,6 +80,7 @@
 
     &__img-wrapper {
       position: relative;
+      z-index: 1;
       width: max-content;
       height: max-content;
     }
@@ -163,6 +91,8 @@
       display: block;
       width: 2500px;
       user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
       pointer-events: none;
 
       @include mixins.media-breakpoint-up(xxxl) {
