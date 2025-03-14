@@ -19,14 +19,10 @@
   <div class="modal__modal">
     <CloseBtn bind:isOpen={modalData.isOpenModal}/>
     <div class="modal__content">
-      {#if modalData.type == "content"}
-        {#if !!modalData.name}
-          <ModalContent name={modalData.name}/>
-        {/if}
-      {:else if modalData.type == "shop"}
-        {#if !!modalData.name}
-          <ModalContentShop name={modalData.name}/>
-        {/if}
+      {#if modalData.type == "content" && !!modalData.name}
+        <ModalContent name={modalData.name}/>
+      {:else if modalData.type == "shop" && !!modalData.name}
+        <ModalContentShop name={modalData.name}/>
       {:else if modalData.type == "contact"}
         <ModalContentContact/>
       {/if}
